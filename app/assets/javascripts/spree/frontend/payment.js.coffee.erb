@@ -1,0 +1,19 @@
+$ ->
+  $('form#checkout_form_payment').submit (event) ->
+    if $(this).data('submitting')
+      true
+    else
+      braintreeClient = new braintree.api.Client clientToken: braintree.clientToken
+      card =
+        number: $("input[data-braintree-name=number]").val()
+        expirationDate: $("input[data-braintree-name=expiration_date]").val().replace(/\s/g, "")
+        cvv: $("input[data-braintree-name=cvv]").val()
+        cardholderName: $("input[data-braintree-name=cardholder_name]").val()
+
+      braintreeClient.tokenizeCard card, (err, nonce) =>
+        $('input[data-braintree-name=payment_method_nonce]')
+          .attr('value', nonce)
+        $(this).submit()
+      $(this).data('submitting', true)
+      false
+
