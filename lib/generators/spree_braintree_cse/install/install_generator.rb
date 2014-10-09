@@ -1,4 +1,4 @@
-module SpreeBraintree-cse
+module Spree::BraintreeCSE
   module Generators
     class InstallGenerator < Rails::Generators::Base
 

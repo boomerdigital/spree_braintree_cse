@@ -16,6 +16,6 @@ end
 
 desc 'Generates a dummy app for testing'
 task :test_app do
-  ENV['LIB_NAME'] = 'spree_braintree-cse'
+  ENV['LIB_NAME'] = 'spree_braintree_cse'
   Rake::Task['extension:test_app'].invoke
 end

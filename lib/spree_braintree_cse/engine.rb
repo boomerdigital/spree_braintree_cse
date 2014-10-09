@@ -2,7 +2,7 @@ module Spree::BraintreeCSE
   class Engine < Rails::Engine
     require 'spree/core'
     isolate_namespace Spree
-    engine_name 'spree_braintree-cse'
+    engine_name 'spree_braintree_cse'
 
     # use rspec for tests
     config.generators do |g|
