@@ -23,6 +23,14 @@ module Spree
           super
         end
       end
+
+      def options_for_payment(p)
+        if p.source.gateway_customer_profile_id.blank? && p.source.gateway_payment_profile_id.present?
+          super p.merge({ payment_method_nonce: p.source.gateway_payment_profile_id })
+        else
+          super
+        end
+      end
     end
   end
 end
