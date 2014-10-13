@@ -7,7 +7,7 @@ module Spree
       end
 
       def authorize_with_cse(money, creditcard, options = {})
-        if creditcard.gateway_payment_profile_id && preferred_use_client_side_encryption
+        if creditcard.gateway_payment_profile_id && !creditcard.gateway_customer_profile_id && preferred_use_client_side_encryption
           payment_method = creditcard.gateway_payment_profile_id
           options[:payment_method_nonce] = true
           provider.authorize(money, payment_method, options)
