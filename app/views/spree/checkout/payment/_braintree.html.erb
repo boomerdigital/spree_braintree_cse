@@ -39,4 +39,4 @@
 </p>
 
 <%= hidden_field_tag "#{param_prefix}[cc_type]", '', :id => "cc_type", :class => 'ccType' %>
-<%= hidden_field_tag "#{param_prefix}[gateway_payment_profile_id]", '', :"data-braintree-name" => 'payment_method_nonce' %>
+<%= hidden_field_tag "#{param_prefix}[encrypted_data]", '', :"data-braintree-name" => 'payment_method_nonce' %>

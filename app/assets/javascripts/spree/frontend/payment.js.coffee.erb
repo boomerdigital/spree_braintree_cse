@@ -14,8 +14,7 @@ $ ->
         cardholderName: $(braintreeName "cardholder_name").val()
 
       braintreeClient.tokenizeCard card, (err, nonce) =>
-        $('input[data-braintree-name=payment_method_nonce]')
-          .attr('value', nonce)
+        $('input[data-braintree-name=payment_method_nonce]').attr('value', nonce)
         $(this).submit()
       $(this).data('submitting', true)
       false
