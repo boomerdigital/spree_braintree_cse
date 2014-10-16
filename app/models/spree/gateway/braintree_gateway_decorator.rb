@@ -4,6 +4,7 @@ module Spree
       included do
         preference :use_client_side_encryption, :boolean
         alias_method_chain :authorize, :cse
+        alias_method_chain :options_for_payment, :cse
       end
 
       def authorize_with_cse(money, creditcard, options = {})
@@ -24,13 +25,15 @@ module Spree
         end
       end
 
-      def options_for_payment(p)
-        if p.source.gateway_customer_profile_id.blank? && p.source.gateway_payment_profile_id.present?
-          super p.merge({ payment_method_nonce: p.source.gateway_payment_profile_id })
+      def options_for_payment_with_cse(p)
+        if p.source.gateway_customer_profile_id.blank? && p.source.gateway_payment_profile_id.blank? && p.source.encrypted_data.present?
+          options = options_for_payment_without_cse(p)
+          options.merge!({ payment_method_nonce: p.source.encrypted_data })
         else
-          super
+          options_for_payment_without_cse(p)
         end
       end
+
     end
   end
 end
