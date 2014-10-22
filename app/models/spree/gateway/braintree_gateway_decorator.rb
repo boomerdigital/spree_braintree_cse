@@ -2,9 +2,11 @@ module Spree
   class Gateway::BraintreeGateway
     concerning :CSE do
       included do
-        preference :use_client_side_encryption, :boolean
-        alias_method_chain :authorize, :cse
-        alias_method_chain :options_for_payment, :cse
+        unless method_defined? :options_for_payment_without_cse
+          preference :use_client_side_encryption, :boolean
+          alias_method_chain :authorize, :cse
+          alias_method_chain :options_for_payment, :cse
+        end
       end
 
       def authorize_with_cse(money, creditcard, options = {})
