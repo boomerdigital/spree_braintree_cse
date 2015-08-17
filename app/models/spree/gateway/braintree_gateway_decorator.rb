@@ -1,5 +1,4 @@
 Spree::Gateway::BraintreeGateway.class_eval do
-
   def authorize_with_cse(money, creditcard, options = {})
     if creditcard.gateway_payment_profile_id && !creditcard.gateway_customer_profile_id && preferred_use_client_side_encryption
       payment_method = creditcard.gateway_payment_profile_id
@@ -12,7 +11,7 @@ Spree::Gateway::BraintreeGateway.class_eval do
 
   def method_type
     if preferred_use_client_side_encryption
-      "braintree"
+      'braintree'
     else
       super
     end
@@ -32,5 +31,4 @@ Spree::Gateway::BraintreeGateway.class_eval do
     alias_method_chain :authorize, :cse
     alias_method_chain :options_for_payment, :cse
   end
-
 end

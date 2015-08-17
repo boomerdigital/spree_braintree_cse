@@ -6,17 +6,17 @@ Introduction goes here.
 Installation
 ------------
 
-Add spree_braintree-cse to your Gemfile:
+Add spree_braintree_cse to your Gemfile:
 
 ```ruby
-gem 'spree_braintree-cse'
+gem 'spree_braintree_cse', github: 'groundctrl/spree_braintree_cse', branch: '3-0-stable'
 ```
 
 Bundle your dependencies and run the installation generator:
 
 ```shell
 bundle
-bundle exec rails g spree_braintree-cse:install
+bundle exec rails g spree_braintree_client_side:install
 ```
 
 Testing
@@ -33,7 +33,7 @@ When testing your applications integration with this extension you may use it's 
 Simply add this require statement to your spec_helper:
 
 ```ruby
-require 'spree_braintree-cse/factories'
+require 'spree_braintree_cse/factories'
 ```
 
 Copyright (c) 2014 [name of extension creator], released under the New BSD License
