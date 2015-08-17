@@ -6,7 +6,7 @@ Introduction goes here.
 Installation
 ------------
 
-Add spree_braintree-cse to your Gemfile:
+Add spree_braintree_cse to your Gemfile:
 
 ```ruby
 gem 'spree_braintree_cse', github: 'groundctrl/spree_braintree_cse', branch: '3-0-stable'
