@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.requirements << 'none'
 
   s.add_dependency 'spree_core', '>= 2.3.4'
-  s.add_dependency 'activemerchant', '~> 1.44.1'
+  s.add_dependency 'activemerchant', '~> 1.44.9999'
   s.add_dependency 'braintree', '~> 2.35.0'
 
   s.add_development_dependency 'capybara', '~> 2.4'
