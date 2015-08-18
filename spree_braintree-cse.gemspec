@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_braintree_cse'
-  s.version     = '2.3.9'
+  s.version     = '2.3.11'
   s.summary     = 'Braintree for Spree with Client-Side Encryption support'
   s.description = ''
   s.required_ruby_version = '>= 1.9.3'
