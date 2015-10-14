@@ -1,7 +1,17 @@
 module Spree
-  class Gateway::BraintreeGateway
+  class Gateway::BraintreeGateway < Gateway
     concerning :CSE do
       included do
+
+        # Define `options_for_payment` here like this because, if Rails reloads
+        # this befre spree_gateway, ruby may not know we're a child of Gateway
+        # and `alias_method_chain :options_for_payment, :cse` won't be able to
+        # access `Spree::Gateway::BraintreeGateway#options_for_payment` because
+        # it is a protected method.
+        def options_for_payment(p)
+          super
+        end
+
         unless method_defined? :options_for_payment_without_cse
           preference :use_client_side_encryption, :boolean
           alias_method_chain :authorize, :cse
