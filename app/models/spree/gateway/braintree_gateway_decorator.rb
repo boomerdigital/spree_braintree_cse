@@ -1,19 +1,13 @@
+require_dependency 'spree/gateway/braintree_gateway'
+
 module Spree
   class Gateway::BraintreeGateway < Gateway
     concerning :CSE do
       included do
-
         unless method_defined? :options_for_payment_without_cse
           preference :use_client_side_encryption, :boolean
           alias_method_chain :authorize, :cse
-
-          if method_defined? :options_for_payment
-            # Check if `#options_for_payment` exist before trying to alias it
-            # because, if the app is reloaded in development, then the method
-            # will have already been moved and `alias_method_chain` will fail.
-            alias_method_chain :options_for_payment, :cse
-          end
-
+          alias_method_chain :options_for_payment, :cse
         end
       end
 
@@ -43,7 +37,6 @@ module Spree
           options_for_payment_without_cse(p)
         end
       end
-
     end
   end
 end
