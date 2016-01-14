@@ -1,9 +1,20 @@
+#= require 'braintree'
+
 $ = jQuery
 
 cc_fld = (scope, name) -> scope.find "input[data-braintree-name=#{name}]"
 cc_val = (scope, name) -> cc_fld(scope, name).val()
 
-$(document).on 'submit', 'form#checkout_form_payment', (event) ->
+payment_form = 'form#checkout_form_payment'
+
+$ ->
+  payment_forms = $ payment_form
+  return if payment_forms.length == 0
+  collector = braintree.data.setup kount: {environment: braintree.environment}
+  cc_fld(payment_forms, 'device_data').val collector.deviceData
+  collector.teardown()
+
+$(document).on 'submit', payment_form, (event) ->
   $_ = $ @
   return if $_.data 'submitting'
 

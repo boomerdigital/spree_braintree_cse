@@ -21,10 +21,14 @@ Spree::Gateway::BraintreeGateway.class_eval do
     end
 
     def options_for_payment payment
-      if payment.source.encrypted_data.present? && no_saved_card?(payment.source)
-        super.merge payment_method_nonce: payment.source.encrypted_data
-      else
-        super
+      super.tap do |options|
+        # Include payment token if provided
+        options.merge! payment_method_nonce: payment.source.encrypted_data if
+          payment.source.encrypted_data.present? && no_saved_card?(payment.source)
+
+        # Include fraud preventing device data if present
+        options.merge! device_data: payment.source.device_data if
+          payment.source.device_data.present?
       end
     end
 
