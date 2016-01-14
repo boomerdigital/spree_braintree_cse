@@ -1,20 +1,22 @@
-braintreeName = (name) ->
-  "input[data-braintree-name=#{name}]"
+$ = jQuery
 
-$ ->
-  $('form#checkout_form_payment').submit (event) ->
-    if $(this).data('submitting')
-      true
-    else
-      braintreeClient = new braintree.api.Client clientToken: braintree.clientToken
-      card =
-        number: $(braintreeName "number").val()
-        expirationDate: $(braintreeName "expiration_date").val().replace(/\s/g, "")
-        cvv: $(braintreeName "cvv").val()
-        cardholderName: $(braintreeName "cardholder_name").val()
+cc_fld = (scope, name) -> scope.find "input[data-braintree-name=#{name}]"
+cc_val = (scope, name) -> cc_fld(scope, name).val()
 
-      braintreeClient.tokenizeCard card, (err, nonce) =>
-        $('input[data-braintree-name=payment_method_nonce]').attr('value', nonce)
-        $(this).submit()
-      $(this).data('submitting', true)
-      false
+$(document).on 'submit', 'form#checkout_form_payment', (event) ->
+  $_ = $ @
+  return if $_.data 'submitting'
+
+  processor = new braintree.api.Client clientToken: braintree.clientToken
+  card =
+    number: cc_val $_, "number"
+    expirationDate: cc_val($_, "expiration_date").replace /\s/g, ""
+    cvv: cc_val $_, "cvv"
+    cardholderName: cc_val $_, "cardholder_name"
+
+  processor.tokenizeCard card, (err, nonce) ->
+    cc_fld($_, 'payment_method_nonce').val nonce
+    $_.submit()
+
+  $_.data 'submitting', true
+  event.preventDefault()
