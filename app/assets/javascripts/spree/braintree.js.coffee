@@ -1,5 +1,3 @@
-#= require 'braintree'
-
 $ = jQuery
 
 cc_fld = (scope, name) -> scope.find "input[data-braintree-name=#{name}]"

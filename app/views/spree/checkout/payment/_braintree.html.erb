@@ -1,9 +1,10 @@
 <% payment_method.provider # Braintree::Configuration is lazily initialized, this sets it up so we can generate a client token. -%>
 
 <% content_for :head do %>
+  <%= javascript_include_tag 'braintree' %>
   <%= javascript_tag do %>
-    braintree.clientToken = "<%= Braintree::ClientToken.generate %>"
-    braintree.environment = "<%= payment_method.provider.preferred_environment %>"
+    braintree.clientToken = "<%= Braintree::ClientToken.generate %>";
+    braintree.environment = "<%= payment_method.preferred_environment %>";
   <% end %>
 <% end -%>
 
