@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.author    = 'Corey Woodcox'
   s.email     = 'corey@railsdog.com'
-  s.homepage  = 'http://www.railsdog.com'
+  s.homepage  = 'http://www.boomer.digital'
 
   #s.files       = `git ls-files`.split("\n")
   #s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
@@ -20,13 +20,13 @@ Gem::Specification.new do |s|
   s.add_dependency 'activemerchant', '>= 1.47'
   s.add_dependency 'braintree', '~> 2.46.0'
 
-  s.add_development_dependency 'capybara', '~> 2.4'
+  s.add_development_dependency 'capybara'
   s.add_development_dependency 'coffee-rails'
   s.add_development_dependency 'database_cleaner'
-  s.add_development_dependency 'factory_girl', '~> 4.4'
+  s.add_development_dependency 'factory_girl'
   s.add_development_dependency 'ffaker'
-  s.add_development_dependency 'rspec-rails',  '~> 3.1'
-  s.add_development_dependency 'sass-rails', '~> 4.0.2'
+  s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'sass-rails'
   s.add_development_dependency 'selenium-webdriver'
   s.add_development_dependency 'simplecov'
   s.add_development_dependency 'sqlite3'

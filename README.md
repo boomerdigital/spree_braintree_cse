@@ -9,7 +9,7 @@ Installation
 Add spree_braintree_cse to your Gemfile:
 
 ```ruby
-gem 'spree_braintree_cse', github: 'groundctrl/spree_braintree_cse', branch: '3-0-stable'
+gem 'spree_braintree_cse', github: 'boomerdigital/spree_braintree_cse'
 ```
 
 Bundle your dependencies and run the installation generator:
@@ -36,4 +36,4 @@ Simply add this require statement to your spec_helper:
 require 'spree_braintree_cse/factories'
 ```
 
-Copyright (c) 2014 [name of extension creator], released under the New BSD License
+Copyright (c) 2014 Railsdog, 2015 Boomer Digital, released under the New BSD License

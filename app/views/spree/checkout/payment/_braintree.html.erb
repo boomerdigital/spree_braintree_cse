@@ -1,9 +1,10 @@
 <% payment_method.provider # Braintree::Configuration is lazily initialized, this sets it up so we can generate a client token. -%>
 
 <% content_for :head do %>
-  <%= javascript_include_tag 'https://js.braintreegateway.com/v2/braintree.js' %>
+  <%= javascript_include_tag 'https://js.braintreegateway.com/js/braintree-2.17.6.min.js' %>
   <%= javascript_tag do %>
-    braintree.clientToken = "<%= Braintree::ClientToken.generate %>"
+    braintree.clientToken = "<%= Braintree::ClientToken.generate %>";
+    braintree.environment = "<%= payment_method.preferred_environment %>";
   <% end %>
 <% end -%>
 
@@ -49,4 +50,5 @@
 
   <%= hidden_field_tag "#{param_prefix}[cc_type]", '', :id => "cc_type", :class => 'ccType' %>
   <%= hidden_field_tag "#{param_prefix}[encrypted_data]", '', :"data-braintree-name" => 'payment_method_nonce' %>
+  <%= hidden_field_tag "#{param_prefix}[device_data]", '', :"data-braintree-name" => 'device_data' %>
 </div>
