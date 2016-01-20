@@ -36,4 +36,11 @@ Simply add this require statement to your spec_helper:
 require 'spree_braintree_cse/factories'
 ```
 
+Todo
+----
+
+Fraud protection and 3D-Secure were added to this plugin. I didn't add a way
+to disable them as it seems you would always want it. But if there is a real
+reason to need them disabled those options should be added.
+
 Copyright (c) 2014 Railsdog, 2015 Boomer Digital, released under the New BSD License
