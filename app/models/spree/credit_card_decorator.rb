@@ -1,3 +1,3 @@
 Spree::CreditCard.class_eval do
-  attr_accessor :device_data
+  attr_accessor :device_data, :nonce
 end

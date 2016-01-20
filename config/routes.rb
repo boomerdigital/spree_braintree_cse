@@ -1,3 +1,5 @@
-Spree::Core::Engine.routes.draw do
-  # Add your extension routes here
+Rails.application.routes.draw do
+  namespace :braintree do
+    resources :payment_method_nonces, only: :create
+  end
 end
