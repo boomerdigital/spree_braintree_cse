@@ -41,16 +41,21 @@ Spree::Gateway::BraintreeGateway.class_eval do
   prepend CSE
 
   module CardSecurity
-    # Actually carries out the authorization of a purchase. This enforces the
-    # 3D Secure functionality and reads the relevant data from the card.
-    # Also copies device data for fraud protection.
     def authorize money, credit_card, options={}
+      # Include device data if present
       options[:device_data] = credit_card.device_data
-      options.merge! three_d_secure: {required: true},
-        payment_method_nonce: credit_card.encrypted_data if
-        money >= credit_card.payment_method.preferred_three_d_threshold
 
-      super money, credit_card, options
+      if (money.to_f / 100) >= credit_card.payment_method.preferred_three_d_threshold
+        # Is expensive enough that three_d_secure should be used
+        options[:payment_method_nonce] = true
+        options[:three_d_secure] = {required: true}
+
+        adjust_options_for_braintree credit_card, options
+        provider.authorize money, credit_card.encrypted_data, options
+      else
+        # Use normal implementation
+        super
+      end
     end
 
     # Adds device data when storing new card to prevent fraud
