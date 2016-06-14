@@ -8,11 +8,11 @@ processor = null
 $ ->
   # Verify the application has been configured and the braintree libraries are
   # loaded.
-  processor = new braintree.api.Client clientToken: braintree.clientToken if braintree? && braintree.clientToken
+  processor = new braintree.api.Client clientToken: braintreeClientToken if braintree? && braintreeClientToken
   return unless processor
 
   # Store device data in form for additional security
-  collector = braintree.data.setup kount: {environment: braintree.environment}
+  collector = braintree.data.setup kount: {environment: braintreeEnvironment}
   cc_fld('form', 'device_data').val collector.deviceData
   collector.teardown()
 
@@ -26,6 +26,7 @@ $(document).on 'submit', 'form#checkout_form_payment', (event) ->
     cvv: cc_val $this, "cvv"
     cardholderName: cc_val $this, "cardholder_name"
 
+  processor = new braintree.api.Client clientToken: braintreeClientToken
   processor.tokenizeCard card, (err, nonce) ->
     $this.data 'submitting', true
     cc_fld($this, 'payment_method_nonce').val nonce
@@ -42,6 +43,7 @@ $(document).on 'submit', '#checkout_form_confirm', (event) ->
 
   event.preventDefault()
 
+  processor = new braintree.api.Client clientToken: braintreeClientToken
   url = '<%= Rails.application.routes.url_helpers.braintree_payment_method_nonces_path %>'
   $.post url, {payment_method_id: fld.data('payment-method-id')}, (nonce)->
     processor.verify3DS amount: order_total, creditCard: nonce, (error, response) ->
