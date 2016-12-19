@@ -1,6 +1,8 @@
 Spree::Gateway::BraintreeGateway.class_eval do
   preference :use_client_side_encryption, :boolean
   preference :three_d_threshold, :integer, default: 10
+  preference :account_profile_threshold, :integer, default: 5
+  preference :above_threshold_account_profile_id, :string
 
   module Extensions
     refine Hash do
@@ -44,6 +46,17 @@ Spree::Gateway::BraintreeGateway.class_eval do
     def authorize money, credit_card, options={}
       # Include device data if present
       options[:device_data] = credit_card.device_data
+
+      method = credit_card.payment_method
+
+      #d { "*" * 10 }
+      #d { money.to_f }
+      #if (money.to_f / 100) >= method.preferred_account_profile_threshold
+      #  options[:merchant_account_id] = method.preferred_above_threshold_account_profile_id
+      #end
+      #d { options[:merchant_account_id] }
+      #d { "*" * 10 }
+      options[:merchant_account_id] = BraintreePresenter.new(method).preferred_merchant_account_id(money.to_f)
 
       if (money.to_f / 100) >= credit_card.payment_method.preferred_three_d_threshold
         # Is expensive enough that three_d_secure should be used
