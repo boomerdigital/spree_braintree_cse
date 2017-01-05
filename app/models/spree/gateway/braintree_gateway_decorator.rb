@@ -56,7 +56,7 @@ Spree::Gateway::BraintreeGateway.class_eval do
       #end
       #d { options[:merchant_account_id] }
       #d { "*" * 10 }
-      options[:merchant_account_id] = BraintreePresenter.new(method).preferred_merchant_account_id(money.to_f)
+      options[:merchant_account_id] = BraintreePresenter.new(method).merchant_account_id(money)
 
       if (money.to_f / 100) >= credit_card.payment_method.preferred_three_d_threshold
         # Is expensive enough that three_d_secure should be used
