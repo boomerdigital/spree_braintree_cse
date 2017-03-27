@@ -1,6 +1,8 @@
 Spree::Gateway::BraintreeGateway.class_eval do
   preference :use_client_side_encryption, :boolean
   preference :three_d_threshold, :integer, default: 10
+  preference :account_profile_threshold, :integer, default: 5
+  preference :above_threshold_account_profile_id, :string
 
   module Extensions
     refine Hash do
@@ -45,10 +47,14 @@ Spree::Gateway::BraintreeGateway.class_eval do
       # Include device data if present
       options[:device_data] = credit_card.device_data
 
+      current_merchant_account_id = BraintreePresenter.new(credit_card.payment_method).merchant_account_id(money)
+      options[:merchant_account_id] = current_merchant_account_id
+      credit_card.payment_method.preferences[:merchant_account_id] = current_merchant_account_id
+
       if (money.to_f / 100) >= credit_card.payment_method.preferred_three_d_threshold
         # Is expensive enough that three_d_secure should be used
-        options[:payment_method_nonce] = true
-        options[:three_d_secure] = {required: true}
+        options[:payment_method_nonce] = credit_card.encrypted_data
+        options[:three_d_secure] = { required: true }
 
         adjust_options_for_braintree credit_card, options
         provider.authorize money, credit_card.encrypted_data, options
@@ -61,6 +67,7 @@ Spree::Gateway::BraintreeGateway.class_eval do
     # Adds device data when storing new card to prevent fraud
     def options_for_payment payment
       super.merge_populated device_data: payment.source.device_data
+      super.merge_populated verification_merchant_account_id: BraintreePresenter.new(payment.payment_method).merchant_account_id(payment.amount.to_f * 100)
     end
   end
   prepend CardSecurity
