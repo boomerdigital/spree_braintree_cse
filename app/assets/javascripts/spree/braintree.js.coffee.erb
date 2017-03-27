@@ -37,7 +37,6 @@ $(document).on 'submit', 'form#checkout_form_payment', (event) ->
 $(document).on 'submit', '#checkout_form_confirm', (event) ->
   $this = $ @
   return if $this.data 'submitting'
-
   fld = cc_fld $this, 'secured_nonce'
   return if fld.length == 0
 
@@ -45,6 +44,7 @@ $(document).on 'submit', '#checkout_form_confirm', (event) ->
 
   processor = new braintree.api.Client clientToken: braintreeClientToken
   url = '<%= Rails.application.routes.url_helpers.braintree_payment_method_nonces_path %>'
+
   $.post url, {payment_method_id: fld.data('payment-method-id')}, (nonce)->
     processor.verify3DS amount: order_total, creditCard: nonce, (error, response) ->
       if error
