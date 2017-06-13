@@ -14,7 +14,9 @@ $ ->
   # Store device data in form for additional security
   collector = braintree.data.setup kount: {environment: braintreeEnvironment}
   cc_fld('form', 'device_data').val collector.deviceData
-  collector.teardown()
+  if window.location.search.match /enable-teardown/
+    collector.teardown()
+    alert 'tore down collector'
 
 $(document).on 'submit', 'form#checkout_form_payment', (event) ->
   $this = $ @
