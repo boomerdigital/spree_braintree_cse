@@ -10,6 +10,8 @@ module Spree::BraintreeCSE
     end
 
     def self.activate
+      Spree::PermittedAttributes.source_attributes << :device_data
+
       Dir.glob(File.join(File.dirname(__FILE__), '../../app/**/*_decorator*.rb')) do |c|
         require_dependency c
       end
