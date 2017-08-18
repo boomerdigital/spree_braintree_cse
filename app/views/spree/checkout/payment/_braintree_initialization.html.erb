@@ -5,6 +5,7 @@ payment_method.provider
 
 <% content_for :head do %>
   <% javascript_include_tag 'https://js.braintreegateway.com/web/3.22.0/js/client.min.js' %>
+  <% javascript_include_tag 'https://js.braintreegateway.com/web/3.22.0/js/hosted-fields.min.js' %>
   <%= javascript_tag do %>
     braintreeClientToken = "<%= Braintree::ClientToken.generate(merchant_account_id: BraintreePresenter.new(payment_method).merchant_account_id(@order.total.to_f * 100.0)) %>"
     braintreeEnvironment = "<%= payment_method.preferred_environment %>"
