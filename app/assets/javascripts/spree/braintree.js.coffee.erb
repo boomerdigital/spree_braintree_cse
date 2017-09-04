@@ -1,63 +1,63 @@
-$ = jQuery
+# $ = jQuery
 
-cc_fld = (scope, name) -> $(scope).find "input[data-braintree-name=#{name}]"
-cc_val = (scope, name) -> cc_fld(scope, name).val()
+# cc_fld = (scope, name) -> $(scope).find "input[data-braintree-name=#{name}]"
+# cc_val = (scope, name) -> cc_fld(scope, name).val()
 
-processor = null
+# processor = null
 
-$ ->
-  # Verify the application has been configured and the braintree libraries are
-  # loaded.
-  processor = new braintree.api.Client clientToken: braintreeClientToken if braintree? && braintreeClientToken
-  return unless processor
+# $ ->
+#   # Verify the application has been configured and the braintree libraries are
+#   # loaded.
+#   processor = new braintree.api.Client clientToken: braintreeClientToken if braintree? && braintreeClientToken
+#   return unless processor
 
-  # Store device data in form for additional security
-  collector = braintree.data.setup kount: {environment: braintreeEnvironment}
-  cc_fld('form', 'device_data').val collector.deviceData
+#   # Store device data in form for additional security
+#   collector = braintree.data.setup kount: {environment: braintreeEnvironment}
+#   cc_fld('form', 'device_data').val collector.deviceData
 
-$(document).on 'submit', 'form#checkout_form_payment', (event) ->
-  $this = $ @
-  return if $this.data 'submitting'
+# $(document).on 'submit', 'form#checkout_form_payment', (event) ->
+#   $this = $ @
+#   return if $this.data 'submitting'
 
-  card =
-    number: cc_val $this, "number"
-    expirationDate: cc_val($this, "expiration_date").replace /\s/g, ""
-    cvv: cc_val $this, "cvv"
-    cardholderName: cc_val $this, "cardholder_name"
+#   card =
+#     number: cc_val $this, "number"
+#     expirationDate: cc_val($this, "expiration_date").replace /\s/g, ""
+#     cvv: cc_val $this, "cvv"
+#     cardholderName: cc_val $this, "cardholder_name"
 
-  processor = new braintree.api.Client clientToken: braintreeClientToken
-  processor.tokenizeCard card, (err, nonce) ->
-    $this.data 'submitting', true
-    cc_fld($this, 'payment_method_nonce').val nonce
-    $this.submit()
+#   processor = new braintree.api.Client clientToken: braintreeClientToken
+#   processor.tokenizeCard card, (err, nonce) ->
+#     $this.data 'submitting', true
+#     cc_fld($this, 'payment_method_nonce').val nonce
+#     $this.submit()
 
-  event.preventDefault()
+#   event.preventDefault()
 
-$(document).on 'submit', '#checkout_form_confirm', (event) ->
-  $this = $ @
-  return if $this.data 'submitting'
-  fld = cc_fld $this, 'secured_nonce'
-  return if fld.length == 0
+# $(document).on 'submit', '#checkout_form_confirm', (event) ->
+#   $this = $ @
+#   return if $this.data 'submitting'
+#   fld = cc_fld $this, 'secured_nonce'
+#   return if fld.length == 0
 
-  event.preventDefault()
+#   event.preventDefault()
 
-  processor = new braintree.api.Client clientToken: braintreeClientToken
-  url = '<%= Rails.application.routes.url_helpers.braintree_payment_method_nonces_url(only_path: true) %>'
+#   processor = new braintree.api.Client clientToken: braintreeClientToken
+#   url = '<%= Rails.application.routes.url_helpers.braintree_payment_method_nonces_url(only_path: true) %>'
 
-  $.post url, {payment_method_id: fld.data('payment-method-id')}, (nonce)->
-    processor.verify3DS amount: order_total, creditCard: nonce, (error, response) ->
-      if error
-        alert error.message
-      else
-        trusted = response.verificationDetails.liabilityShifted
-        security_available = response.verificationDetails.liabilityShiftPossible
+#   $.post url, {payment_method_id: fld.data('payment-method-id')}, (nonce)->
+#     processor.verify3DS amount: order_total, creditCard: nonce, (error, response) ->
+#       if error
+#         alert error.message
+#       else
+#         trusted = response.verificationDetails.liabilityShifted
+#         security_available = response.verificationDetails.liabilityShiftPossible
 
-        if trusted || !security_available
-          $this.data 'submitting', true
-          fld.val response.nonce
-          $this.submit()
-          return
-        else
-          alert 'Authentication failed. Please try again.'
+#         if trusted || !security_available
+#           $this.data 'submitting', true
+#           fld.val response.nonce
+#           $this.submit()
+#           return
+#         else
+#           alert 'Authentication failed. Please try again.'
 
-    $('input[name=commit]').removeClass('disabled').prop 'disabled', false
+#     $('input[name=commit]').removeClass('disabled').prop 'disabled', false
