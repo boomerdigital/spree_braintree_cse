@@ -8,6 +8,9 @@ Spree::Gateway::BraintreeGateway.class_eval do
     refine Hash do
       # Will merge all key/value pairs where the value is populated
       def merge_populated! other
+
+        debugger
+
         other.each do |key, value|
           self[key] = value if value.present?
         end
@@ -28,6 +31,9 @@ Spree::Gateway::BraintreeGateway.class_eval do
     # special template just for Braintree to contain the special encrypted_data,
     # device_data and nonce information.
     def method_type
+
+      debugger
+
       if preferred_use_client_side_encryption
         'braintree'
       else
@@ -37,6 +43,9 @@ Spree::Gateway::BraintreeGateway.class_eval do
 
     # When creating a profile for a new card to pass on the encrypted card info
     def options_for_payment payment
+
+      debugger
+
       super.merge_populated payment_method_nonce: payment.source.encrypted_data
     end
   end
@@ -45,6 +54,9 @@ Spree::Gateway::BraintreeGateway.class_eval do
   module CardSecurity
     def authorize money, credit_card, options={}
       # Include device data if present
+
+      debugger
+
       options[:device_data] = credit_card.device_data
       options[:merchant_account_id] = merchant_account_id credit_card.payment_method, money
 
@@ -63,6 +75,9 @@ Spree::Gateway::BraintreeGateway.class_eval do
 
     # Adds device data when storing new card to prevent fraud
     def options_for_payment payment
+
+      debugger
+
       super.merge_populated \
         device_data: payment.source.device_data,
         verification_merchant_account_id: merchant_account_id(payment.payment_method, payment.amount.to_f * 100)

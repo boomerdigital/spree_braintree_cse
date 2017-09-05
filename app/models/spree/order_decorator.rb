@@ -13,8 +13,6 @@ Spree::Order.class_eval do
     # so that it is part of the nested attributes used to create the records.
     def update_from_params params, permitted_params, request_env = {}
 
-      debugger
-
       if params[:device_data].present?
         payment_attributes = params[:order][:payments_attributes] if params[:order]
         if payment_attributes && payment_attributes.first
@@ -44,8 +42,6 @@ Spree::Order.class_eval do
     # we don't actually check that as it doesn't hurt anything to run it on
     # other transitions and keeps the code simpler by avoiding that check.
     def update_from_params params, permitted_params, request_env = {}
-
-      debugger
 
       # Run the standard behavior to update the order with the request info
       ret = super
